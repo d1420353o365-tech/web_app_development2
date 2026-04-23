@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-5 border-bottom border-secondary pb-4">
+    <h1 class="display-5 fw-bold"><span class="text-muted">Hello,</span> {{ username }} 👋</h1>
+    <p class="lead text-muted">您的個人化 AI 學習助理已準備就緒，今天想學點什麼？</p>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Quick Actions -->
+    <div class="col-12 col-md-4">
+        <div class="glass-panel dash-card p-4 h-100 d-flex flex-column align-items-start">
+            <div class="p-3 bg-primary bg-opacity-25 rounded-circle mb-3">
+                <i class="bi bi-journal-text fs-3 text-primary"></i>
+            </div>
+            <h4>新增筆記</h4>
+            <p class="text-muted small flex-grow-1">上傳或貼上長篇內容，讓 AI 幫您萃取精華重點與摘要。</p>
+            <a href="#" class="btn btn-outline-light w-100 mt-2">開始整理</a>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-4">
+        <div class="glass-panel dash-card p-4 h-100 d-flex flex-column align-items-start">
+            <div class="p-3 bg-success bg-opacity-25 rounded-circle mb-3">
+                <i class="bi bi-calendar2-check fs-3 text-success"></i>
+            </div>
+            <h4>安排計畫</h4>
+            <p class="text-muted small flex-grow-1">設定總目標與期限，自動化排程並追蹤每日學習進度。</p>
+            <a href="#" class="btn btn-outline-light w-100 mt-2">建立計畫</a>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-4">
+        <div class="glass-panel dash-card p-4 h-100 d-flex flex-column align-items-start">
+            <div class="p-3 bg-warning bg-opacity-25 rounded-circle mb-3">
+                <i class="bi bi-lightning-charge fs-3 text-warning"></i>
+            </div>
+            <h4>智能測驗</h4>
+            <p class="text-muted small flex-grow-1">AI 自動出題檢驗學習成果，並建立個人專屬的 AI 錯題本。</p>
+            <a href="#" class="btn btn-outline-light w-100 mt-2">接受挑戰</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2 mb-5">
+    <!-- Recent Plans -->
+    <div class="col-md-6">
+        <h3 class="mb-3 fs-4"><i class="bi bi-clock-history text-primary me-2"></i>近期計畫</h3>
+        {% if plans %}
+            <div class="list-group glass-panel">
+            {% for plan in plans %}
+                <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 border-bottom border-secondary text-white p-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ plan.goal }}</h5>
+                        <small class="text-muted">{{ plan.time_allocated }} 分鐘</small>
+                    </div>
+                    <small class="text-muted">{{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="glass-panel p-5 text-center">
+                <i class="bi bi-calendar-x text-muted" style="font-size: 2.5rem;"></i>
+                <p class="text-muted mt-2 mb-0">尚未建立任何學習計畫</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Notes -->
+    <div class="col-md-6">
+        <h3 class="mb-3 fs-4"><i class="bi bi-journal-bookmark text-success me-2"></i>近期筆記</h3>
+        {% if notes %}
+            <div class="list-group glass-panel">
+            {% for note in notes %}
+                <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 border-bottom border-secondary text-white p-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ note.title }}</h5>
+                    </div>
+                    <p class="mb-1 text-muted text-truncate" style="max-width: 90%;">{{ note.original_content[:50] }}...</p>
+                    <small class="text-muted">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </a>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="glass-panel p-5 text-center">
+                <i class="bi bi-journal-x text-muted" style="font-size: 2.5rem;"></i>
+                <p class="text-muted mt-2 mb-0">尚未存放任何筆記</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

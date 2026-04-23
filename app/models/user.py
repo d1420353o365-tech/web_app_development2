@@ -16,25 +16,54 @@ class User(db.Model):
 
     @classmethod
     def create(cls, username, email, password_hash):
-        new_user = cls(username=username, email=email, password_hash=password_hash)
-        db.session.add(new_user)
-        db.session.commit()
-        return new_user
+        """新增使用者"""
+        try:
+            new_user = cls(username=username, email=email, password_hash=password_hash)
+            db.session.add(new_user)
+            db.session.commit()
+            return new_user
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error creating user: {e}")
+            return None
 
     @classmethod
     def get_by_id(cls, user_id):
-        return cls.query.get(user_id)
+        """根據 ID 取得使用者"""
+        try:
+            return cls.query.get(user_id)
+        except Exception as e:
+            print(f"Error fetching user by id: {e}")
+            return None
 
     @classmethod
     def get_by_email(cls, email):
-        return cls.query.filter_by(email=email).first()
+        """根據 Email 取得使用者，用於登入驗證"""
+        try:
+            return cls.query.filter_by(email=email).first()
+        except Exception as e:
+            print(f"Error fetching user by email: {e}")
+            return None
 
     def update(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        db.session.commit()
-        return self
+        """更新使用者資料"""
+        try:
+            for key, value in kwargs.items():
+                setattr(self, key, value)
+            db.session.commit()
+            return self
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating user: {e}")
+            return None
 
     def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+        """刪除使用者"""
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return True
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error deleting user: {e}")
+            return False
